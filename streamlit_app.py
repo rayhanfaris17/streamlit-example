@@ -1,3 +1,7 @@
+import google.generativeai as palm
+
+palm.configure(api_key="AIzaSyDCU-MMzjRH-glaOpWI4FlEm76eNcUJlMI")
+
 import streamlit as st
 import requests
 
