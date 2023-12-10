@@ -1,3 +1,5 @@
+pip install google-generativeai streamlit
+
 import google.generativeai as palm
 
 palm.configure(api_key="AIzaSyDCU-MMzjRH-glaOpWI4FlEm76eNcUJlMI")
