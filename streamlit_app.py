@@ -8,7 +8,7 @@ import requests
 # Fungsi untuk memanggil model AI (Palm 2)
 def generate_resep(ingredients):
     # Ganti URL_API dengan URL yang sesuai untuk model AI Palm 2 Anda
-    url_api = api_key
+    url_api = "api_key"
     payload = {"ingredients": ingredients}
     response = requests.post(url_api, json=payload)
 
