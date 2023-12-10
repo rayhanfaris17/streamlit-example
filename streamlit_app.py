@@ -1,40 +1,34 @@
-import altair as alt
-import numpy as np
-import pandas as pd
 import streamlit as st
+import requests
 
-"""
-# Welcome to Streamlit!
+# Fungsi untuk memanggil model AI (Palm 2)
+def generate_resep(ingredients):
+    # Ganti URL_API dengan URL yang sesuai untuk model AI Palm 2 Anda
+    url_api = "URL_API/generate_resep"
+    payload = {"ingredients": ingredients}
+    response = requests.post(url_api, json=payload)
 
-Edit `/streamlit_app.py` to customize this app to your heart's desire :heart:.
-If you have any questions, checkout our [documentation](https://docs.streamlit.io) and [community
-forums](https://discuss.streamlit.io).
+    if response.status_code == 200:
+        return response.json()["resep"]
+    else:
+        return "Gagal menghasilkan resep. Silakan coba lagi."
 
-In the meantime, below is an example of what you can do with just a few lines of code:
-"""
+# Tampilan UI menggunakan Streamlit
+def main():
+    st.title("Chef AI - Generate Resep")
 
-num_points = st.slider("Number of points in spiral", 1, 10000, 1100)
-num_turns = st.slider("Number of turns in spiral", 1, 300, 31)
+    # Input dari pengguna
+    ingredients = st.text_area("Masukkan bahan-bahan (pisahkan dengan koma)", "")
+    ingredients_list = [ingredient.strip() for ingredient in ingredients.split(",")]
 
-indices = np.linspace(0, 1, num_points)
-theta = 2 * np.pi * num_turns * indices
-radius = indices
+    # Tombol untuk memanggil model AI dan menampilkan resep
+    if st.button("Generate Resep"):
+        if ingredients_list:
+            resep = generate_resep(ingredients_list)
+            st.subheader("Resep yang Dihasilkan:")
+            st.write(resep)
+        else:
+            st.warning("Masukkan setidaknya satu bahan untuk menghasilkan resep.")
 
-x = radius * np.cos(theta)
-y = radius * np.sin(theta)
-
-df = pd.DataFrame({
-    "x": x,
-    "y": y,
-    "idx": indices,
-    "rand": np.random.randn(num_points),
-})
-
-st.altair_chart(alt.Chart(df, height=700, width=700)
-    .mark_point(filled=True)
-    .encode(
-        x=alt.X("x", axis=None),
-        y=alt.Y("y", axis=None),
-        color=alt.Color("idx", legend=None, scale=alt.Scale()),
-        size=alt.Size("rand", legend=None, scale=alt.Scale(range=[1, 150])),
-    ))
+if __name__ == "__main__":
+    main()
